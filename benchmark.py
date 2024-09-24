@@ -234,8 +234,8 @@ def get_datasets_with_batches(dataset_name: str,
         return xb, yb
     else:
         batched_clients = []
-        for client in reshaped_clients['image']:
-            xb, yb = create_batches(client, reshaped_clients['label'], batch_size, device_type)
+        for client in reshaped_clients:  # Iterate over the list of clients
+            xb, yb = create_batches(client['image'], client['label'], batch_size, device_type)
             batched_clients.append({'image': xb, 'label': yb})
         return batched_clients
 
@@ -261,13 +261,13 @@ if __name__ == '__main__':
             if n_clients == 1:
                 batch_x_iid, batch_y_iid = reshaped_clients_iid  # Now handle as batch tuple (xb, yb)
             else:
-                for client in reshaped_clients_iid['image']:
-                    batch_x_iid, batch_y_iid = create_batches(client, reshaped_clients_iid['label'], batch_size, device_type)
+                for client in reshaped_clients_iid:
+                    batch_x_iid, batch_y_iid = create_batches(client['image'], client['label'], batch_size, device_type)
             
             # Benchmark batch creation for Non-IID data
             print(f"Benchmarking batch creation for Non-IID data with {n_clients} clients...")
             if n_clients == 1:
                 batch_x_non_iid, batch_y_non_iid = reshaped_clients_non_iid  # Handle as batch tuple (xb, yb)
             else:
-                for client in reshaped_clients_non_iid['image']:
-                    batch_x_non_iid, batch_y_non_iid = create_batches(client, reshaped_clients_non_iid['label'], batch_size, device_type)
+                for client in reshaped_clients_non_iid:
+                    batch_x_non_iid, batch_y_non_iid = create_batches(client['image'], client['label'], batch_size, device_type)
