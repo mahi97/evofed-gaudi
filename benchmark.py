@@ -146,8 +146,14 @@ def create_batches(x, y, batch_size, device_type='cpu'):
     steps_per_epoch = train_ds_size // batch_size
     
     # Create a permutation of the indices
-    perms = torch.randperm(train_ds_size, device=device)[:steps_per_epoch * batch_size]
-    perms = perms.view(steps_per_epoch, batch_size)
+    if steps_per_epoch > 0:
+        perms = torch.randperm(train_ds_size, device=device)[:steps_per_epoch * batch_size]
+        perms = perms.view(steps_per_epoch, batch_size)
+    else:
+        perms = torch.arange(train_ds_size, device=device).view(1, -1)  # Create a single batch if too small
+    
+    # Adjust if perms size exceeds y size
+    perms = perms.clamp(max=y.shape[0] - 1)
     
     # Rearrange the data according to the permuted indices
     xb = x[perms]
