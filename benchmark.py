@@ -233,7 +233,7 @@ if __name__ == '__main__':
     n_clients_list = [1, 5, 10]
     n_shards_per_client_list = [2, 5]
     batch_size = 64
-    device_type = 'habana'
+    device_type = 'cuda'
     use_max_padding = False
     
     for n_clients in n_clients_list:
@@ -247,7 +247,7 @@ if __name__ == '__main__':
             # Benchmark batch creation for IID data
             print(f"Benchmarking batch creation for IID data with {n_clients} clients...")
             if n_clients == 1:
-                batch_x_iid, batch_y_iid = create_batches(reshaped_clients_iid.data, reshaped_clients_iid.targets, batch_size, device_type)
+                batch_x_iid, batch_y_iid = reshaped_clients_iid  # Now handle as batch tuple (xb, yb)
             else:
                 for client in reshaped_clients_iid['image']:
                     batch_x_iid, batch_y_iid = create_batches(client, reshaped_clients_iid['label'], batch_size, device_type)
@@ -255,7 +255,7 @@ if __name__ == '__main__':
             # Benchmark batch creation for Non-IID data
             print(f"Benchmarking batch creation for Non-IID data with {n_clients} clients...")
             if n_clients == 1:
-                batch_x_non_iid, batch_y_non_iid = create_batches(reshaped_clients_non_iid.data, reshaped_clients_non_iid.targets, batch_size, device_type)
+                batch_x_non_iid, batch_y_non_iid = reshaped_clients_non_iid  # Handle as batch tuple (xb, yb)
             else:
                 for client in reshaped_clients_non_iid['image']:
                     batch_x_non_iid, batch_y_non_iid = create_batches(client, reshaped_clients_non_iid['label'], batch_size, device_type)
