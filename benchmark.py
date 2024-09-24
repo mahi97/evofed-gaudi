@@ -137,6 +137,12 @@ def create_batches(x, y, batch_size, device_type='cpu'):
     y = y.to(device)
     
     train_ds_size = x.shape[0]
+    
+    # Adjust batch size to ensure it doesn't exceed the dataset size
+    if batch_size > train_ds_size:
+        batch_size = train_ds_size
+        print(f"Batch size adjusted to {batch_size} because it exceeds the dataset size")
+
     steps_per_epoch = train_ds_size // batch_size
     
     # Create a permutation of the indices
