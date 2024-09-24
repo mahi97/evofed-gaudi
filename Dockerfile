@@ -20,7 +20,7 @@ RUN chmod +x /workspace/setup_env.sh
 RUN /workspace/setup_env.sh
 
 # Set the entrypoint to Python
-# ENTRYPOINT ["python"]
+ENTRYPOINT ["python3"]
 
 # Default command is to run the user-specified script (can be overridden)
-CMD ["python3", "your_script.py"]
+CMD ["your_script.py"]
